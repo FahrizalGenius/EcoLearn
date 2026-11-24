@@ -3,6 +3,7 @@ export const dummyUser = {
   name: 'Budi Santoso',
   username: 'budisantoso',
   email: 'budi@ecolearn.id',
+  role: 'student',
   level: 'Ekonom Muda Level 3',
   levelNumber: 3,
   currentLevelXp: 450,
@@ -85,4 +86,17 @@ export const dummyUser = {
       iconType: 'check',
     },
   ],
+};
+
+export const dummyAdmin = {
+  id: 'adm-001',
+  name: 'Administrator EcoLearn',
+  username: 'admin',
+  email: 'admin@ecolearn.id',
+  role: 'admin',
+  title: 'Guru Pengampu Ekonomi SMA Kelas X',
+  nip: '19850412 201001 1 012',
+  school: 'SMA Negeri 1 EcoLearn',
+  avatarColor: 'bg-indigo-600',
+  level: 'Master Administrator',
 };

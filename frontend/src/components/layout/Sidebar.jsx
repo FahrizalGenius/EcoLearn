@@ -16,6 +16,7 @@ import {
   X,
   Sparkles,
   Flame,
+  ShieldCheck,
 } from 'lucide-react';
 
 export default function Sidebar({ onClose }) {
@@ -82,34 +83,60 @@ export default function Sidebar({ onClose }) {
         </div>
       </div>
 
-      {/* Navigation Menu */}
-      <nav className="flex-1 overflow-y-auto px-4 py-5 space-y-1.5">
-        <p className="px-3 text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-2">
-          Menu Pembelajaran
-        </p>
+        {/* Navigation Menu */}
+        <nav className="flex-1 overflow-y-auto px-4 py-5 space-y-1.5">
+          <p className="px-3 text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-2">
+            Menu Pembelajaran
+          </p>
 
-        {navLinks.map((item) => {
-          const Icon = item.icon;
-          return (
+          {navLinks.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                onClick={onClose}
+                className={({ isActive }) => `
+                  flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-sm transition-all duration-200
+                  ${
+                    isActive
+                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  }
+                `}
+              >
+                <Icon className="w-5 h-5 shrink-0" />
+                <span>{item.label}</span>
+              </NavLink>
+            );
+          })}
+
+          <div className="pt-4 mt-3 border-t border-slate-100">
+            <p className="px-3 text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-2">
+              Akses Pendidik
+            </p>
             <NavLink
-              key={item.to}
-              to={item.to}
+              to="/admin"
               onClick={onClose}
               className={({ isActive }) => `
-                flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-sm transition-all duration-200
+                flex items-center justify-between px-3.5 py-3 rounded-2xl font-bold text-sm transition-all duration-200
                 ${
                   isActive
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/25'
+                    : 'text-indigo-700 bg-indigo-50/80 hover:bg-indigo-100'
                 }
               `}
             >
-              <Icon className="w-5 h-5 shrink-0" />
-              <span>{item.label}</span>
+              <div className="flex items-center gap-3">
+                <ShieldCheck className="w-5 h-5 shrink-0 text-indigo-600" />
+                <span>Panel Guru / Admin</span>
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-indigo-200/60 text-indigo-800">
+                Admin
+              </span>
             </NavLink>
-          );
-        })}
-      </nav>
+          </div>
+        </nav>
 
       {/* Logout Action Footer */}
       <div className="p-4 border-t border-slate-100">

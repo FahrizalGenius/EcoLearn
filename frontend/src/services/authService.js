@@ -1,5 +1,5 @@
 import { storageService } from './storageService';
-import { dummyUser } from '../data/userData';
+import { dummyUser, dummyAdmin } from '../data/userData';
 
 const AUTH_KEY = 'ecolearn_auth_user';
 
@@ -9,10 +9,18 @@ export const authService = {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (identifier && password && password.length >= 6) {
-          const savedUser = storageService.get(AUTH_KEY, null);
-          const user = savedUser && (savedUser.email === identifier || savedUser.username === identifier)
-            ? savedUser
-            : { ...dummyUser, email: identifier.includes('@') ? identifier : `${identifier}@ecolearn.id`, username: identifier };
+          const lowerId = identifier.toLowerCase();
+          const isAdmin = lowerId === 'admin' || lowerId === 'admin@ecolearn.id' || lowerId.includes('admin');
+
+          let user;
+          if (isAdmin) {
+            user = { ...dummyAdmin };
+          } else {
+            const savedUser = storageService.get(AUTH_KEY, null);
+            user = savedUser && (savedUser.email === identifier || savedUser.username === identifier)
+              ? savedUser
+              : { ...dummyUser, email: identifier.includes('@') ? identifier : `${identifier}@ecolearn.id`, username: identifier, role: 'student' };
+          }
           
           storageService.set(AUTH_KEY, user);
           resolve(user);
@@ -21,6 +29,12 @@ export const authService = {
         }
       }, 400);
     });
+  },
+
+  switchUserRole(role = 'admin') {
+    const user = role === 'admin' ? { ...dummyAdmin } : { ...dummyUser, role: 'student' };
+    storageService.set(AUTH_KEY, user);
+    return user;
   },
 
   register(name, username, email, password) {

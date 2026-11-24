@@ -32,15 +32,23 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const switchRole = (role = 'admin') => {
+    const updated = authService.switchUserRole(role);
+    setUser(updated);
+    return updated;
+  };
+
   return (
     <AuthContext.Provider
       value={{
         user,
         isAuthenticated: !!user,
+        isAdmin: user?.role === 'admin',
         loading,
         login,
         register,
         logout,
+        switchRole,
       }}
     >
       {children}

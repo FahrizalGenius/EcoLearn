@@ -27,6 +27,13 @@ import EvaluasiTestPage from '../pages/user/EvaluasiTestPage';
 import HasilEvaluasiPage from '../pages/user/HasilEvaluasiPage';
 import PerbandinganEvaluasiPage from '../pages/user/PerbandinganEvaluasiPage';
 
+// Admin Portal Pages
+import AdminLayout from '../layouts/AdminLayout';
+import AdminDashboardPage from '../pages/admin/AdminDashboardPage';
+import AdminMateriPage from '../pages/admin/AdminMateriPage';
+import AdminSiswaPage from '../pages/admin/AdminSiswaPage';
+import AdminConfigPage from '../pages/admin/AdminConfigPage';
+
 // Simulation Pages
 import SimulasiPage from '../pages/user/SimulasiPage';
 import SimulasiPermintaanPenawaranPage from '../pages/user/SimulasiPermintaanPenawaranPage';
@@ -74,6 +81,14 @@ export default function AppRoutes() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>
+      </Route>
+
+      {/* Admin Portal Routes (Mobile & Desktop Responsive) */}
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminDashboardPage />} />
+        <Route path="siswa" element={<AdminSiswaPage />} />
+        <Route path="materi" element={<AdminMateriPage />} />
+        <Route path="konfigurasi" element={<AdminConfigPage />} />
       </Route>
 
       {/* Fallback */}

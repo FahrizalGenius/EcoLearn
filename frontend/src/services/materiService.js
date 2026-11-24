@@ -1,6 +1,15 @@
 import { storageService } from './storageService';
-import { materiList } from '../data/materiData';
+import { materiList as fallbackMateriList } from '../data/materiData';
+import { adminMateriService } from './adminMateriService';
 import { authService } from './authService';
+
+const getBaseMateriList = () => {
+  try {
+    return adminMateriService.getAllMateri();
+  } catch {
+    return fallbackMateriList;
+  }
+};
 
 const getProgressStorageKey = (userId) => `ecolearn_materi_progress_${userId || 'guest'}`;
 
@@ -20,7 +29,8 @@ export const materiService = {
   // Get single materi by ID (supports '1' or 'materi-1') with live progress attached
   getMateriById(id, userId) {
     const cleanId = String(id).replace('materi-', '');
-    const materi = materiList.find(
+    const currentList = getBaseMateriList();
+    const materi = currentList.find(
       (m) => m.id === id || m.id === `materi-${cleanId}` || m.id === cleanId
     );
 
@@ -58,7 +68,7 @@ export const materiService = {
   getAllMateriWithProgress(userId) {
     const userProgress = this.getUserProgress(userId);
 
-    return materiList.map((materi) => {
+    return getBaseMateriList().map((materi) => {
       const itemProgress = userProgress[materi.id];
       const totalChapters = materi.chapters?.length || 1;
 

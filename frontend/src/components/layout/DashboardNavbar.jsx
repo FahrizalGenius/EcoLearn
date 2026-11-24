@@ -11,6 +11,7 @@ import {
   LogOut,
   Sparkles,
   TrendingUp,
+  ShieldCheck,
 } from 'lucide-react';
 
 export default function DashboardNavbar({ onOpenSidebar }) {
@@ -192,6 +193,18 @@ export default function DashboardNavbar({ onOpenSidebar }) {
                 >
                   <User className="w-4 h-4 text-blue-500" />
                   <span>Profil Saya</span>
+                </Link>
+
+                <Link
+                  to="/admin"
+                  onClick={() => setProfileDropdownOpen(false)}
+                  className="flex items-center justify-between px-3 py-2 rounded-2xl text-xs font-bold text-indigo-700 bg-indigo-50/70 hover:bg-indigo-100 transition-colors"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <ShieldCheck className="w-4 h-4 text-indigo-600" />
+                    <span>Panel Guru (Admin)</span>
+                  </div>
+                  <span className="text-[9px] font-black bg-indigo-200 text-indigo-800 px-1.5 py-0.5 rounded">NEW</span>
                 </Link>
 
                 <Link

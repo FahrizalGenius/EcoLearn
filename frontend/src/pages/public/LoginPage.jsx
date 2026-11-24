@@ -5,7 +5,7 @@ import EcoLogo from '../../components/common/EcoLogo';
 import CharacterIllustration from '../../components/common/CharacterIllustration';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
-import { User, Lock, ArrowRight, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react';
+import { User, Lock, ArrowRight, Sparkles, CheckCircle2, AlertCircle, ShieldCheck } from 'lucide-react';
 
 export default function LoginPage() {
   const [identifier, setIdentifier] = useState('budi@ecolearn.id');
@@ -20,6 +20,12 @@ export default function LoginPage() {
   const handleFillDemo = () => {
     setIdentifier('budi@ecolearn.id');
     setPassword('password123');
+    setError('');
+  };
+
+  const handleFillAdmin = () => {
+    setIdentifier('admin@ecolearn.id');
+    setPassword('admin123');
     setError('');
   };
 
@@ -45,11 +51,17 @@ export default function LoginPage() {
 
     setIsSubmitting(true);
     try {
-      await login(identifier, password);
-      setSuccess('Berhasil masuk! Mengarahkan ke dashboard...');
+      const loggedUser = await login(identifier, password);
+      const isAdmin = loggedUser?.role === 'admin' || identifier.toLowerCase().includes('admin');
+      
+      setSuccess(isAdmin ? 'Berhasil masuk sebagai Guru (Admin)! Mengarahkan ke Portal Admin...' : 'Berhasil masuk! Mengarahkan ke dashboard...');
       setTimeout(() => {
-        navigate('/dashboard');
-      }, 700);
+        if (isAdmin) {
+          navigate('/admin');
+        } else {
+          navigate('/dashboard');
+        }
+      }, 600);
     } catch (err) {
       setError(err.message || 'Terjadi kesalahan saat masuk. Periksa kembali akun Anda.');
     } finally {
@@ -87,7 +99,7 @@ export default function LoginPage() {
                 Selamat Datang!
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 font-medium">
-                Masuk untuk melanjutkan petualangan belajar ekonomimu.
+                Masuk untuk melanjutkan petualangan belajar atau kelola kelas.
               </p>
             </div>
           </div>
@@ -116,7 +128,7 @@ export default function LoginPage() {
               icon={User}
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
-              placeholder="Contoh: budi@ecolearn.id"
+              placeholder="Contoh: admin@ecolearn.id"
               required
             />
 
@@ -152,20 +164,42 @@ export default function LoginPage() {
           </form>
 
           {/* Demo Account Quick-Fill Card */}
-          <div className="pt-4 border-t border-slate-100 text-center">
+          <div className="pt-4 border-t border-slate-100 space-y-2.5">
+            <p className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 text-center">
+              Pilihan Cepat Masuk Demo
+            </p>
+
+            {/* Demo Guru / Admin */}
+            <div className="bg-indigo-50/70 p-3 rounded-2xl border border-indigo-200/80 flex items-center justify-between">
+              <div className="text-left">
+                <p className="text-[11px] font-bold text-indigo-900 flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" /> Akun Guru (Admin)
+                </p>
+                <p className="text-[10px] text-indigo-600/80 font-medium">admin@ecolearn.id • Sandi: admin123</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleFillAdmin}
+                className="text-xs font-black text-indigo-700 hover:text-indigo-800 bg-indigo-200/70 px-3 py-1.5 rounded-xl hover:bg-indigo-200 transition-colors cursor-pointer"
+              >
+                Pilih Admin
+              </button>
+            </div>
+
+            {/* Demo Siswa */}
             <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 flex items-center justify-between">
               <div className="text-left">
                 <p className="text-[11px] font-bold text-slate-700 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-amber-500" /> Akun Demo Siswa
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Akun Siswa (Budi)
                 </p>
-                <p className="text-[10px] text-slate-400">Email: budi@ecolearn.id | Pass: password123</p>
+                <p className="text-[10px] text-slate-400 font-medium">budi@ecolearn.id • Sandi: password123</p>
               </div>
               <button
                 type="button"
                 onClick={handleFillDemo}
                 className="text-xs font-black text-blue-600 hover:text-blue-700 bg-blue-100/60 px-3 py-1.5 rounded-xl hover:bg-blue-100 transition-colors cursor-pointer"
               >
-                Isi Otomatis
+                Pilih Siswa
               </button>
             </div>
           </div>
